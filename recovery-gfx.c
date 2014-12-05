@@ -38,6 +38,9 @@
 
 #include "minui.h"
 
+// RGBX8888
+#define RECOVERY_RGBX
+
 #if defined(RECOVERY_BGRA)
 #define PIXEL_FORMAT GGL_PIXEL_FORMAT_BGRA_8888
 #define PIXEL_SIZE   4
@@ -148,7 +151,7 @@ static int get_framebuffer(GGLSurface *fb)
     fb->width = vi.xres;
     fb->height = vi.yres;
     fb->stride = fi.line_length/PIXEL_SIZE;
-    fb->data = (void*) (((unsigned) bits) + vi.yres * fi.line_length);
+    fb->data = bits;
     fb->format = PIXEL_FORMAT;
     memset(fb->data, 0, vi.yres * fi.line_length);
 
@@ -170,31 +173,7 @@ static void set_active_framebuffer(unsigned n)
     vi.yres_virtual = vi.yres * PIXEL_SIZE;
     vi.yoffset = n * vi.yres;
     vi.bits_per_pixel = PIXEL_SIZE * 8;
-    if (ioctl(gr_fb_fd, FBIOPUT_VSCREENINFO, &vi) < 0) {
-        perror("active fb swap failed");
-    }
-}
-
-void gr_flip_32(unsigned *bits, unsigned *ptr, unsigned count)
-{
-   unsigned i=0;
-   while (i<count) {
-        uint32_t rgb32, red, green, blue, alpha;
-
-        /* convert 16 bits to 32 bits */
-        rgb32 = ((ptr[i] >> 11) & 0x1F);
-        red = (rgb32 << 3) | (rgb32 >> 2);
-        rgb32 = ((ptr[i] >> 5) & 0x3F);
-        green = (rgb32 << 2) | (rgb32 >> 4);
-        rgb32 = ((ptr[i]) & 0x1F);
-        blue = (rgb32 << 3) | (rgb32 >> 2);
-        alpha = 0xff;
-        rgb32 = (alpha << 24) | (blue << 16)
-        | (green << 8) | (red);
-        *bits=rgb32;
-        i++;
-        bits++;
-    }
+    ioctl(gr_fb_fd, FBIOPUT_VSCREENINFO, &vi);
 }
 
 void gr_flip(void)
@@ -206,9 +185,8 @@ void gr_flip(void)
 
     /* copy data from the in-memory surface to the buffer we're about
      * to make active. */
-   gr_flip_32((unsigned *)gr_framebuffer[gr_active_fb].data, \
-                   (unsigned *)gr_mem_surface.data,
-                   (fi.line_length * vi.yres)/4);
+    memcpy(gr_framebuffer[gr_active_fb].data, gr_mem_surface.data,
+           fi.line_length * vi.yres);
 
     /* inform the display driver */
     set_active_framebuffer(gr_active_fb);
