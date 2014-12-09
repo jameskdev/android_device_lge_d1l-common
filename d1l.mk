@@ -26,7 +26,6 @@ $(call inherit-product, build/target/product/full.mk)
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/bootlogo_res_images-timestamp:root/bootlogo_res_images-timestamp \
     $(LOCAL_PATH)/rootdir/chargerlogo_res_images-timestamp:root/chargerlogo_res_images-timestamp \
-    $(LOCAL_PATH)/rootdir/fstab.qcom:root/fstab.qcom \
     $(LOCAL_PATH)/rootdir/init.grand.rc:root/init.grand.rc \
     $(LOCAL_PATH)/rootdir/init.lge.cmm.usb.sh:root/init.lge.cmm.usb.sh \
     $(LOCAL_PATH)/rootdir/init.lge.early.rc:root/init.lge.early.rc \
@@ -37,10 +36,9 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/init.qcom.sh:root/init.qcom.sh \
     $(LOCAL_PATH)/rootdir/init.qcom.usb.rc:root/init.qcom.usb.rc \
     $(LOCAL_PATH)/rootdir/init.qcom.usb.sh:root/init.qcom.usb.sh \
-    $(LOCAL_PATH)/rootdir/init.target.rc:root/init.target.rc \
     $(LOCAL_PATH)/rootdir/initlogo.rle:root/initlogo.rle \
-    $(LOCAL_PATH)/rootdir/lgdma.fota.rc:root/lgdma.fota.rc \
-    $(LOCAL_PATH)/rootdir/lgdma.fota_update.rc:root/lgdma.fota_update.rc \
+    $(LOCAL_PATH)/rootdir/lgdms.fota.rc:root/lgdms.fota.rc \
+    $(LOCAL_PATH)/rootdir/lgdms.fota_update.rc:root/lgdms.fota_update.rc \
     $(LOCAL_PATH)/rootdir/ueventd.grand.rc:root/ueventd.grand.rc \
     $(LOCAL_PATH)/rootdir/bootimages/Loop_1.rle:root/bootimages/Loop_1.rle \
     $(LOCAL_PATH)/rootdir/bootimages/Loop_2.rle:root/bootimages/Loop_2.rle \
@@ -150,7 +148,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/firmware/a225p5_pm4.fw:/system/etc/firmware/a225p5_pm4.fw \
     $(LOCAL_PATH)/firmware/a225_pfp.fw:/system/etc/firmware/a225_pfp.fw \
     $(LOCAL_PATH)/firmware/a225_pm4.fw:/system/etc/firmware/a225_pm4.fw \
-    $(LOCAL_PATH)/firmware/cyttsp_8960_cdp.hdx:/system/etc/firmware/cyttsp_8960_cdp.hex \
+    $(LOCAL_PATH)/firmware/cyttsp_8960_cdp.hex:/system/etc/firmware/cyttsp_8960_cdp.hex \
     $(LOCAL_PATH)/firmware/leia_pfp_470.fw:/system/etc/firmware/leia_pfp_470.fw \
     $(LOCAL_PATH)/firmware/leia_pm4_470.fw:/system/etc/firmware/leia_pm4_470.fw \
     $(LOCAL_PATH)/firmware/vidc_1080p.fw:/system/etc/firmware/vidc_1080p.fw \
@@ -203,9 +201,9 @@ PRODUCT_PACKAGES += \
     libgenlock \
     libmemalloc \
     liboverlay \
-    gralloc.msm8660 \
-    hwcomposer.msm8660 \
-    copybit.msm8660 \
+    gralloc.msm8960 \
+    hwcomposer.msm8960 \
+    copybit.msm8960 \
     audio.primary.msm8960 \
     audio_policy.msm8960 \
     alsa.msm8960 \
