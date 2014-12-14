@@ -47,12 +47,15 @@ enum {
     GRALLOC_USAGE_PRIVATE_IOMMU_HEAP      =       GRALLOC_USAGE_PRIVATE_2,
     /* MM heap is a carveout heap for video, can be secured*/
     GRALLOC_USAGE_PRIVATE_MM_HEAP         =       GRALLOC_USAGE_PRIVATE_3,
-    /* CAMERA heap is a carveout heap for camera, is not secured*/
-    GRALLOC_USAGE_PRIVATE_CAMERA_HEAP     =       0x01000000,
+    /* ADSP heap is a carveout heap, is not secured*/
+    GRALLOC_USAGE_PRIVATE_ADSP_HEAP       =       0x01000000,
 
     /* Set this for allocating uncached memory (using O_DSYNC)
      * cannot be used with noncontiguous heaps */
     GRALLOC_USAGE_PRIVATE_UNCACHED        =       0x02000000,
+
+    /* Buffer content should be displayed on an primary display only */
+    GRALLOC_USAGE_PRIVATE_INTERNAL_ONLY   =       0x04000000,
 
     /* Buffer content should be displayed on an external display only */
     GRALLOC_USAGE_PRIVATE_EXTERNAL_ONLY   =       0x08000000,
@@ -65,12 +68,11 @@ enum {
     /* Close Caption displayed on an external display only */
     GRALLOC_USAGE_PRIVATE_EXTERNAL_CC     =       0x00200000,
 
-    /* Use this flag to request content protected buffers. Please note
-     * that this flag is different from the GRALLOC_USAGE_PROTECTED flag
-     * which can be used for buffers that are not secured for DRM
-     * but still need to be protected from screen captures
-     */
-    GRALLOC_USAGE_PRIVATE_CP_BUFFER       =       0x00400000,
+    /* CAMERA heap is a carveout heap for camera, is not secured*/
+    GRALLOC_USAGE_PRIVATE_CAMERA_HEAP     =       0x00400000,
+
+    /* This flag is used for SECURE display usecase */
+    GRALLOC_USAGE_PRIVATE_SECURE_DISPLAY  =       0x00800000,
 };
 
 enum {
@@ -84,7 +86,7 @@ enum {
                              GRALLOC_USAGE_PRIVATE_SYSTEM_HEAP    |\
                              GRALLOC_USAGE_PRIVATE_IOMMU_HEAP     |\
                              GRALLOC_USAGE_PRIVATE_MM_HEAP        |\
-                             GRALLOC_USAGE_PRIVATE_CAMERA_HEAP)
+                             GRALLOC_USAGE_PRIVATE_ADSP_HEAP)
 
 #define INTERLACE_MASK 0x80
 #define S3D_FORMAT_MASK 0xFF000
@@ -101,6 +103,7 @@ enum {
     HAL_PIXEL_FORMAT_RG_88                  = 0x10E,
     HAL_PIXEL_FORMAT_YCbCr_444_SP           = 0x10F,
     HAL_PIXEL_FORMAT_YCrCb_444_SP           = 0x110,
+    HAL_PIXEL_FORMAT_YCrCb_422_I            = 0x111,
     HAL_PIXEL_FORMAT_INTERLACE              = 0x180,
 
 };
@@ -162,6 +165,7 @@ struct private_handle_t : public native_handle {
             PRIV_FLAGS_ITU_R_601          = 0x00200000,
             PRIV_FLAGS_ITU_R_601_FR       = 0x00400000,
             PRIV_FLAGS_ITU_R_709          = 0x00800000,
+            PRIV_FLAGS_SECURE_DISPLAY     = 0x01000000,
         };
 
         // file-descriptors
@@ -170,9 +174,14 @@ struct private_handle_t : public native_handle {
         // ints
         int     magic;
         int     flags;
+#ifdef QCOM_BSP_CAMERA_ABI_HACK
+        int     bufferType;
+#endif
         int     size;
         int     offset;
+#ifndef QCOM_BSP_CAMERA_ABI_HACK
         int     bufferType;
+#endif
         int     base;
         int     offset_metadata;
         // The gpu address mapped into the mmu.
@@ -191,7 +200,14 @@ struct private_handle_t : public native_handle {
                          int format,int width, int height, int eFd = -1,
                          int eOffset = 0, int eBase = 0) :
             fd(fd), fd_metadata(eFd), magic(sMagic),
-            flags(flags), size(size), offset(0), bufferType(bufferType),
+            flags(flags),
+#ifdef QCOM_BSP_CAMERA_ABI_HACK
+            bufferType(bufferType),
+#endif
+            size(size), offset(0),
+#ifndef QCOM_BSP_CAMERA_ABI_HACK
+            bufferType(bufferType),
+#endif
             base(0), offset_metadata(eOffset), gpuaddr(0),
             format(format), width(width), height(height),
             base_metadata(eBase)

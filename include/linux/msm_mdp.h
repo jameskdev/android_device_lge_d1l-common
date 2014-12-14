@@ -130,9 +130,6 @@ enum {
 	NUM_HSIC_PARAM,
 };
 
-#define MDSS_MDP_ROT_ONLY		0x80
-#define MDSS_MDP_RIGHT_MIXER		0x100
-
 /* mdp_blit_req flag values */
 #define MDP_ROT_NOP 0
 #define MDP_FLIP_LR 0x1
@@ -140,9 +137,12 @@ enum {
 #define MDP_ROT_90 0x4
 #define MDP_ROT_180 (MDP_FLIP_UD|MDP_FLIP_LR)
 #define MDP_ROT_270 (MDP_ROT_90|MDP_FLIP_UD|MDP_FLIP_LR)
+#define MDSS_MDP_ROT_ONLY		0x80
+#define MDSS_MDP_RIGHT_MIXER		0x100
 #define MDP_DITHER 0x8
 #define MDP_BLUR 0x10
 #define MDP_BLEND_FG_PREMULT 0x20000
+#define MDP_IS_FG 0x40000
 #define MDP_DEINTERLACE 0x80000000
 #define MDP_SHARPENING  0x40000000
 #define MDP_NO_DMA_BARRIER_START	0x20000000
@@ -546,6 +546,7 @@ struct mdp_buf_sync {
 	uint32_t acq_fen_fd_cnt;
 	int *acq_fen_fd;
 	int *rel_fen_fd;
+	int *retire_fen_fd;
 };
 
 struct mdp_buf_fence {
@@ -576,7 +577,7 @@ struct mdp_mixer_info {
 	int z_order;
 };
 
-#define MAX_PIPE_PER_MIXER  4
+#define MAX_PIPE_PER_MIXER  5
 
 struct msmfb_mixer_info_req {
 	int mixer_num;
