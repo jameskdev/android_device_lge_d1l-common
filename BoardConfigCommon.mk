@@ -96,35 +96,3 @@ ENABLE_WEBGL := true
 # TARGET_QCOM_AUDIO_VARIANT := caf
 TARGET_DISPLAY_INSECURE_MM_HEAP := true
 
-BOARD_SEPOLICY_DIRS += \
-        device/lge/d1l-common/sepolicy
-
-BOARD_SEPOLICY_UNION += \
-        genfs_contexts \
-        file_contexts \
-	property_contexts \
-	te_macros \
-	bluetooth.te \
-	camera.te \
-	device.te \
-	dhcp.te \
-	domain.te \
-	drmserver.te \
-	file.te \
-	kickstart.te \
-	init.te \
-	mediaserver.te \
-	mpdecision.te \
-	netmgrd.te \
-	property.te \
-	qmux.te \
-	rild.te \
-	rmt.te \
-	sensors.te \
-	surfaceflinger.te \
-	system.te \
-	tee.te \
-	thermald.te \
-	ueventd.te \
-	wpa_supplicant.te
-
