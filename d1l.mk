@@ -26,6 +26,7 @@ $(call inherit-product, build/target/product/full.mk)
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/bootlogo_res_images-timestamp:root/bootlogo_res_images-timestamp \
     $(LOCAL_PATH)/rootdir/chargerlogo_res_images-timestamp:root/chargerlogo_res_images-timestamp \
+    $(LOCAL_PATH)/rootdir/init:root/init \
     $(LOCAL_PATH)/rootdir/init.grand.rc:root/init.grand.rc \
     $(LOCAL_PATH)/rootdir/init.lge.cmm.usb.sh:root/init.lge.cmm.usb.sh \
     $(LOCAL_PATH)/rootdir/init.lge.early.rc:root/init.lge.early.rc \
@@ -81,6 +82,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/bootimages/Loop_39.rle:root/bootimages/Loop_39.rle \
     $(LOCAL_PATH)/rootdir/bootimages/Loop_40.rle:root/bootimages/Loop_40.rle \
     $(LOCAL_PATH)/rootdir/res/images/errorlogo.png:root/res/images/errorlogo.png \
+    $(LOCAL_PATH)/rootdir/sbin/adbd:root/sbin/adbd \
     $(LOCAL_PATH)/rootdir/sbin/chargerlogo:root/sbin/chargerlogo \
     $(LOCAL_PATH)/rootdir/sbin/lge_fota:root/sbin/lge_fota \
     $(LOCAL_PATH)/rootdir/sbin/wallpaper:root/sbin/wallpaper
